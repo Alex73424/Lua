@@ -62,3 +62,67 @@ game.Players.PlayerAdded:Connect(function(players)
 		Nametag.Parent = char:WaitForChild("Head")
 	end)
 end)
+
+--day/night cycle
+
+local Lighting = game:GetService("Lighting")
+
+local cycleDuration = 25
+local dayLength = 24
+local startTime = 6 
+
+
+Lighting.ClockTime = startTime
+
+while true do
+	for i = 0, dayLength, 0.1 do
+		local currentTime = (startTime + i) % dayLength
+		Lighting.ClockTime = currentTime
+		wait(cycleDuration / (dayLength / 0.1))
+	end
+end
+
+--datastoreservices
+
+local Players = game:GetService("Players")
+local DataStoreService = game:GetService("DataStoreService")
+local Saver = DataStoreService:GetDataStore("SaveLeaderstats")
+
+Players.PlayerAdded:Connect(function(player)
+	local Data = nil
+	local success, errormessage = pcall(function()
+		Data = Saver:GetAsync(tostring(player.UserId))
+	end)
+
+	if success then
+		if Data then
+			for i, v in pairs(Data) do
+				player:WaitForChild("leaderstats"):WaitForChild(i).Value = v
+			end
+		end
+	else
+		error(errormessage)
+	end
+end)
+
+local function Save(player)
+	local SavedData = {}
+	for _, v in pairs(player.leaderstats:GetChildren()) do
+		SavedData[v.Name] = v.Value
+	end
+
+	local success, errormessage = pcall(function()
+		Saver:SetAsync(tostring(player.UserId), SavedData)
+	end)
+	if not success then
+		error(errormessage)
+	end
+end
+
+Players.PlayerRemoving:Connect(Save)
+
+game:BindToClose(function()
+	for _, v in pairs(Players:GetPlayers()) do
+		Save(v)
+	end
+end)
