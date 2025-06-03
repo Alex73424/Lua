@@ -1,0 +1,64 @@
+--leaderstats Script
+
+game.Players.PlayerAdded:Connect(function(player)
+	local leaderstats = Instance.new("Folder")
+	leaderstats.Name = "leaderstats"
+	leaderstats.Parent = player
+
+	
+	local coins = Instance.new("IntValue")
+	coins.Name = "Coins"
+	coins.Value = 0
+	coins.Parent = leaderstats
+
+end)
+
+--Touch to claim part
+
+local touchPart = script.Parent
+local clickDetector = touchPart:WaitForChild("ClickDetector")
+local claimPart = workspace:WaitForChild("Claim")
+local surfaceGui = claimPart:FindFirstChild("SurfaceGui")
+local textLabel = surfaceGui and surfaceGui:FindFirstChildWhichIsA("TextLabel")
+
+local ServerStorage = game:GetService("ServerStorage")
+local tool = ServerStorage:FindFirstChild("ClassicSword")
+
+local claimedPlayers = {}
+
+clickDetector.MouseClick:Connect(function(player)
+	if claimedPlayers[player] then return end 
+
+	local backpack = player:FindFirstChild("Backpack")
+	if not backpack or not tool then return end
+
+	
+	local clonedTool = tool:Clone()
+	clonedTool.Parent = backpack
+
+	
+	if textLabel then
+		textLabel.Text = "Claimed"
+	end
+
+	claimedPlayers[player] = true
+end)
+
+
+if textLabel then
+	textLabel.Text = "UnClaimed"
+end
+
+--scripting a Headgui
+
+local Headgui = game:GetService("ReplicatedStorage"):WaitForChild("HeadGui")
+
+game.Players.PlayerAdded:Connect(function(players)
+	players.CharacterAdded:Connect(function(char)
+		
+		local Nametag = Headgui:Clone()
+		Nametag.PlayerName.Text = players.Name
+		
+		Nametag.Parent = char:WaitForChild("Head")
+	end)
+end)
