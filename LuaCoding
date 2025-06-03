@@ -126,3 +126,86 @@ game:BindToClose(function()
 		Save(v)
 	end
 end)
+
+--if you touch the part you die
+
+local part = game.Workspace.Part1
+
+script.Parent.Touched:Connect(function(hit)
+	if hit.Parent:FindFirstChild("Humanoid") then
+		hit.Parent.Humanoid.Health = 0
+	end
+end)
+
+--tweenservices when button is clicked.
+
+local TweenService = game:GetService("TweenService")
+local button = script.Parent
+local Frame = button.Parent:WaitForChild("Frame1")
+
+
+local clickSound = Instance.new("Sound")
+clickSound.SoundId = "rbxassetid://6026984224" 
+clickSound.Volume = 0.5
+clickSound.Parent = button
+
+
+Frame.Visible = true
+Frame.BackgroundTransparency = 1
+Frame.Position = UDim2.new(0.5, 0, 1.2, 0) 
+Frame.AnchorPoint = Vector2.new(0.5, 0.5) 
+
+local isAnimating = false
+
+button.MouseButton1Click:Connect(function()
+	
+	if Frame.Position == UDim2.new(0.5, 0, 0.5, 0) or isAnimating then return end
+
+	clickSound:Play()
+	Frame.Visible = true
+	isAnimating = true
+
+	local positions = {
+		Position = UDim2.new(0.5, 0, 0.5, 0), 
+		BackgroundTransparency = 0
+	}
+
+	local tweenInfo = TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+	local tween = TweenService:Create(Frame, tweenInfo, positions)
+	tween:Play()
+
+	tween.Completed:Connect(function()
+		isAnimating = false
+	end)
+end)
+
+
+--when closed
+
+local TweenService = game:GetService("TweenService")
+local button = script.Parent
+local Frame = button.Parent.Parent:WaitForChild("Frame1")
+
+
+local clickSound = Instance.new("Sound")
+clickSound.SoundId = "rbxassetid://6026984224" 
+clickSound.Volume = 0.5
+clickSound.Parent = button
+
+button.MouseButton1Click:Connect(function()
+	clickSound:Play()
+
+	
+	local positions2 = {
+		Position = UDim2.new(0.5, 0, 1.2, 0), 
+		BackgroundTransparency = 1
+	}
+
+	local tweenInfo = TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
+	local tween = TweenService:Create(Frame, tweenInfo, positions2)
+	tween:Play()
+
+	tween.Completed:Connect(function()
+		Frame.Visible = false
+	end)
+end)
