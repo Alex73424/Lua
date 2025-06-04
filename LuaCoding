@@ -9,7 +9,6 @@ local frame = script.Parent
 local statusLabel = frame:WaitForChild("StatusLabel3")
 local rewardLabel = frame:WaitForChild("RewardLabel3")
 local claimButton = frame:WaitForChild("ClaimButton3")
-local taskLabel = frame:WaitForChild("TaskLabel3")
 
 local completed = false
 local claimed = false
