@@ -4,10 +4,7 @@
 
 - <b>Inventory systems, Guis, datastore, leaderboards, tween services, make custom admin commands, shops, npcs, etc.</b>
   
-<h2> What I can't do and mostly avoid:</h2>
-  - Combat Systems
-  - Vehicle Systems
-  - Weapon Systems
+
 
 
 <h2>My prices:</h2>
